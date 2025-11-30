@@ -43,9 +43,11 @@ export const toCompletionItem = (fn: StrudelFunction): CompletionItem => ({
 export const toCompletionItems = (fns: ApiData): CompletionItem[] => fns.map(toCompletionItem)
 
 export const getCompletions = (
-  _text: string,
-  _position: Position,
-  _apiData: ApiData
+  text: string,
+  position: Position,
+  apiData: ApiData
 ): CompletionItem[] => {
-  return []
+  const word = getWordAtPosition(text, position)
+  const filtered = filterByPrefix(word ?? "")(apiData)
+  return toCompletionItems(filtered)
 }

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import { CompletionItemKind } from "vscode-languageserver"
 import {
   filterByPrefix,
+  getCompletions,
   getWordAtPosition,
   toCompletionItem,
   toCompletionItems,
@@ -143,5 +144,33 @@ describe("toCompletionItems", () => {
     expect(result).toHaveLength(4)
     expect(result[0]?.label).toBe("lpf")
     expect(result[3]?.label).toBe("s")
+  })
+})
+
+describe("getCompletions", () => {
+  it("returns filtered items for partial word", () => {
+    const text = "lp"
+    const result = getCompletions(text, { line: 0, character: 2 }, mockApiData)
+    expect(result).toHaveLength(2)
+    expect(result.map((r) => r.label)).toEqual(["lpf", "lpq"])
+  })
+
+  it("returns all items on empty position", () => {
+    const text = ""
+    const result = getCompletions(text, { line: 0, character: 0 }, mockApiData)
+    expect(result).toHaveLength(4)
+  })
+
+  it("returns all items after dot", () => {
+    const text = 'note("c").'
+    const result = getCompletions(text, { line: 0, character: 10 }, mockApiData)
+    expect(result).toHaveLength(4)
+  })
+
+  it("returns single match", () => {
+    const text = "not"
+    const result = getCompletions(text, { line: 0, character: 3 }, mockApiData)
+    expect(result).toHaveLength(1)
+    expect(result[0]?.label).toBe("note")
   })
 })
