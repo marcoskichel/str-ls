@@ -1,11 +1,11 @@
 {
-  "name": "str-lsp",
+  "name": "str-ls",
   "version": "0.1.0",
   "description": "Language Server Protocol implementation for Strudel live coding language",
   "type": "module",
   "main": "dist/server.js",
   "bin": {
-    "str-lsp": "dist/server.js"
+    "str-ls": "dist/server.js"
   },
   "scripts": {
     "build": "tsup",
