@@ -7,6 +7,12 @@ type MiniNotationJson = {
   readonly operators: readonly MiniNotationElement[]
 }
 
+type ExtendedSamplesJson = {
+  readonly gmInstruments: readonly MiniNotationElement[]
+  readonly drumMachines: readonly MiniNotationElement[]
+  readonly synths: readonly MiniNotationElement[]
+}
+
 const parseNoteWord = (word: string): { note: string; octave: string | null } | null => {
   const match = word.match(/^([a-g][#b]?)(\d)?$/i)
   if (!match) return null
@@ -18,6 +24,18 @@ const findNote = (noteName: string, data: MiniNotationJson): MiniNotationElement
 
 const findSample = (name: string, data: MiniNotationJson): MiniNotationElement | undefined =>
   data.samples.find((s) => s.name === name.toLowerCase())
+
+const findExtendedSample = (
+  name: string,
+  extendedData: ExtendedSamplesJson,
+): MiniNotationElement | undefined => {
+  const lowerName = name.toLowerCase()
+  return (
+    extendedData.gmInstruments.find((s) => s.name.toLowerCase() === lowerName) ??
+    extendedData.drumMachines.find((s) => s.name.toLowerCase() === lowerName) ??
+    extendedData.synths.find((s) => s.name.toLowerCase() === lowerName)
+  )
+}
 
 const findOperator = (op: string, data: MiniNotationJson): MiniNotationElement | undefined =>
   data.operators.find((o) => o.name === op)
@@ -41,6 +59,7 @@ const toHoverContent = (element: MiniNotationElement, extra?: string): MarkupCon
 
 export const getMiniNotationHover = (
   data: MiniNotationJson,
+  extendedData: ExtendedSamplesJson | null,
   word: string | null,
   operator: string | null,
 ): Hover | null => {
@@ -65,6 +84,13 @@ export const getMiniNotationHover = (
   const sampleElement = findSample(word, data)
   if (sampleElement) {
     return { contents: toHoverContent(sampleElement) }
+  }
+
+  if (extendedData) {
+    const extendedElement = findExtendedSample(word, extendedData)
+    if (extendedElement) {
+      return { contents: toHoverContent(extendedElement) }
+    }
   }
 
   return null

@@ -45,7 +45,7 @@ const mockMiniNotationData = {
 
 describe("getMiniNotationHover", () => {
   it("returns hover for note", () => {
-    const result = getMiniNotationHover(mockMiniNotationData, "c3", null)
+    const result = getMiniNotationHover(mockMiniNotationData, null, "c3", null)
     expect(result).not.toBeNull()
     expect(result?.contents.kind).toBe(MarkupKind.Markdown)
     expect((result?.contents as { value: string }).value).toContain("C natural note")
@@ -53,59 +53,59 @@ describe("getMiniNotationHover", () => {
   })
 
   it("returns hover for sharp note", () => {
-    const result = getMiniNotationHover(mockMiniNotationData, "c#4", null)
+    const result = getMiniNotationHover(mockMiniNotationData, null, "c#4", null)
     expect(result).not.toBeNull()
     expect((result?.contents as { value: string }).value).toContain("C sharp note")
   })
 
   it("returns hover for flat note", () => {
-    const result = getMiniNotationHover(mockMiniNotationData, "eb3", null)
+    const result = getMiniNotationHover(mockMiniNotationData, null, "eb3", null)
     expect(result).not.toBeNull()
     expect((result?.contents as { value: string }).value).toContain("E flat note")
   })
 
   it("returns hover for sample", () => {
-    const result = getMiniNotationHover(mockMiniNotationData, "bd", null)
+    const result = getMiniNotationHover(mockMiniNotationData, null, "bd", null)
     expect(result).not.toBeNull()
     expect((result?.contents as { value: string }).value).toContain("Bass drum")
   })
 
   it("returns hover for operator", () => {
-    const result = getMiniNotationHover(mockMiniNotationData, null, "*")
+    const result = getMiniNotationHover(mockMiniNotationData, null, null, "*")
     expect(result).not.toBeNull()
     expect((result?.contents as { value: string }).value).toContain("Multiply/speed up")
   })
 
   it("returns hover for rest operator", () => {
-    const result = getMiniNotationHover(mockMiniNotationData, null, "~")
+    const result = getMiniNotationHover(mockMiniNotationData, null, null, "~")
     expect(result).not.toBeNull()
     expect((result?.contents as { value: string }).value).toContain("Rest/silence")
   })
 
   it("returns null for unknown word", () => {
-    const result = getMiniNotationHover(mockMiniNotationData, "xyz", null)
+    const result = getMiniNotationHover(mockMiniNotationData, null, "xyz", null)
     expect(result).toBeNull()
   })
 
   it("returns null when both word and operator are null", () => {
-    const result = getMiniNotationHover(mockMiniNotationData, null, null)
+    const result = getMiniNotationHover(mockMiniNotationData, null, null, null)
     expect(result).toBeNull()
   })
 
   it("prioritizes operator over word", () => {
-    const result = getMiniNotationHover(mockMiniNotationData, "bd", "*")
+    const result = getMiniNotationHover(mockMiniNotationData, null, "bd", "*")
     expect(result).not.toBeNull()
     expect((result?.contents as { value: string }).value).toContain("Multiply")
   })
 
   it("includes examples in hover", () => {
-    const result = getMiniNotationHover(mockMiniNotationData, "bd", null)
+    const result = getMiniNotationHover(mockMiniNotationData, null, "bd", null)
     expect((result?.contents as { value: string }).value).toContain("Examples")
     expect((result?.contents as { value: string }).value).toContain('s("bd")')
   })
 
   it("handles note without octave", () => {
-    const result = getMiniNotationHover(mockMiniNotationData, "c", null)
+    const result = getMiniNotationHover(mockMiniNotationData, null, "c", null)
     expect(result).not.toBeNull()
     expect((result?.contents as { value: string }).value).toContain("C natural note")
     expect((result?.contents as { value: string }).value).not.toContain("Octave:")

@@ -1,5 +1,6 @@
 import type { Hover, HoverParams, TextDocuments } from "vscode-languageserver"
 import type { TextDocument } from "vscode-languageserver-textdocument"
+import extendedSamplesData from "../data/extended-samples.json" with { type: "json" }
 import miniNotationData from "../data/mini-notation.json" with { type: "json" }
 import { getHoverInfo } from "../services/hover.service.js"
 import { getMiniNotationHover } from "../services/mini-notation-hover.service.js"
@@ -22,7 +23,7 @@ export const hoverHandler =
     if (stringContext) {
       const word = getWordInString(stringContext.content, stringContext.cursorOffset)
       const operator = getOperatorAtPosition(stringContext.content, stringContext.cursorOffset)
-      return getMiniNotationHover(miniNotationData, word, operator)
+      return getMiniNotationHover(miniNotationData, extendedSamplesData, word, operator)
     }
 
     return getHoverInfo(text, params.position, apiData)

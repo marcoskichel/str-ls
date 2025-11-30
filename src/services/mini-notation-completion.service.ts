@@ -7,6 +7,12 @@ type MiniNotationJson = {
   readonly operators: readonly MiniNotationElement[]
 }
 
+type ExtendedSamplesJson = {
+  readonly gmInstruments: readonly MiniNotationElement[]
+  readonly drumMachines: readonly MiniNotationElement[]
+  readonly synths: readonly MiniNotationElement[]
+}
+
 const generateNoteWithOctaves = (note: MiniNotationElement): readonly CompletionItem[] => {
   const octaves = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   return octaves.map((octave) => ({
@@ -62,6 +68,7 @@ export const filterByPrefix =
 
 export const getMiniNotationCompletions = (
   data: MiniNotationJson,
+  extendedData: ExtendedSamplesJson | null,
   prefix: string | null,
 ): CompletionItem[] => {
   const filter = filterByPrefix(prefix)
@@ -75,6 +82,13 @@ export const getMiniNotationCompletions = (
   const operatorCompletions = filter(data.operators).map(toOperatorCompletion)
 
   const completions = [...noteCompletions, ...sampleCompletions, ...operatorCompletions]
+
+  if (extendedData) {
+    const gmCompletions = filter(extendedData.gmInstruments).map(toSampleCompletion)
+    const drumMachineCompletions = filter(extendedData.drumMachines).map(toSampleCompletion)
+    const synthCompletions = filter(extendedData.synths).map(toSampleCompletion)
+    completions.push(...gmCompletions, ...drumMachineCompletions, ...synthCompletions)
+  }
 
   if (!prefix || "euclidean".startsWith(prefix.toLowerCase())) {
     completions.push(toEuclideanSnippet())

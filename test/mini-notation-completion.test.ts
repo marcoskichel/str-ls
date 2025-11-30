@@ -76,7 +76,7 @@ describe("filterByPrefix", () => {
 
 describe("getMiniNotationCompletions", () => {
   it("returns completions for notes with octaves", () => {
-    const result = getMiniNotationCompletions(mockMiniNotationData, "c")
+    const result = getMiniNotationCompletions(mockMiniNotationData, null, "c")
     const noteCompletions = result.filter((r) => r.label.startsWith("c"))
     expect(noteCompletions.length).toBeGreaterThan(1)
     expect(noteCompletions.some((c) => c.label === "c")).toBe(true)
@@ -85,7 +85,7 @@ describe("getMiniNotationCompletions", () => {
   })
 
   it("returns sample completions", () => {
-    const result = getMiniNotationCompletions(mockMiniNotationData, "b")
+    const result = getMiniNotationCompletions(mockMiniNotationData, null, "b")
     const bdCompletion = result.find((r) => r.label === "bd")
     expect(bdCompletion).toBeDefined()
     expect(bdCompletion?.kind).toBe(CompletionItemKind.Value)
@@ -93,14 +93,14 @@ describe("getMiniNotationCompletions", () => {
   })
 
   it("returns operator completions", () => {
-    const result = getMiniNotationCompletions(mockMiniNotationData, "*")
+    const result = getMiniNotationCompletions(mockMiniNotationData, null, "*")
     const starCompletion = result.find((r) => r.label === "*")
     expect(starCompletion).toBeDefined()
     expect(starCompletion?.kind).toBe(CompletionItemKind.Operator)
   })
 
   it("returns euclidean snippet", () => {
-    const result = getMiniNotationCompletions(mockMiniNotationData, null)
+    const result = getMiniNotationCompletions(mockMiniNotationData, null, null)
     const euclidean = result.find((r) => r.label === "euclidean")
     expect(euclidean).toBeDefined()
     expect(euclidean?.kind).toBe(CompletionItemKind.Snippet)
@@ -108,18 +108,18 @@ describe("getMiniNotationCompletions", () => {
   })
 
   it("filters by prefix", () => {
-    const result = getMiniNotationCompletions(mockMiniNotationData, "sd")
+    const result = getMiniNotationCompletions(mockMiniNotationData, null, "sd")
     expect(result.some((r) => r.label === "sd")).toBe(true)
     expect(result.some((r) => r.label === "bd")).toBe(false)
   })
 
   it("returns all completions when prefix is null", () => {
-    const result = getMiniNotationCompletions(mockMiniNotationData, null)
+    const result = getMiniNotationCompletions(mockMiniNotationData, null, null)
     expect(result.length).toBeGreaterThan(10)
   })
 
   it("generates octave variants for notes", () => {
-    const result = getMiniNotationCompletions(mockMiniNotationData, "c")
+    const result = getMiniNotationCompletions(mockMiniNotationData, null, "c")
     const octaveNotes = result.filter((r) => /^c\d$/.test(r.label))
     expect(octaveNotes).toHaveLength(10)
     expect(octaveNotes[0]?.label).toBe("c0")
