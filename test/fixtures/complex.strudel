@@ -1,0 +1,17 @@
+stack(
+  note("c3 e3 g3 b3")
+    .s("sawtooth")
+    .lpf(sine.range(200, 2000).slow(8))
+    .lpq(5)
+    .attack(0.1)
+    .decay(0.2)
+    .sustain(0.5)
+    .release(0.3),
+
+  s("bd*4")
+    .gain(0.8),
+
+  s("hh*8")
+    .gain(0.4)
+    .pan(sine.range(0, 1).fast(2))
+)

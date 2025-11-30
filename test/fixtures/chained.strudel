@@ -1,0 +1,5 @@
+note("c e g b")
+  .s("piano")
+  .lpf(500)
+  .room(0.5)
+  .delay(0.25)
