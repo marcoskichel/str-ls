@@ -1,4 +1,4 @@
-import { CompletionItemKind, type CompletionItem, type Position } from "vscode-languageserver"
+import { type CompletionItem, CompletionItemKind, type Position } from "vscode-languageserver"
 import type { ApiData, StrudelFunction } from "../types.js"
 
 const isWordChar = (char: string): boolean => /[a-zA-Z0-9_]/.test(char)
@@ -45,7 +45,7 @@ export const toCompletionItems = (fns: ApiData): CompletionItem[] => fns.map(toC
 export const getCompletions = (
   text: string,
   position: Position,
-  apiData: ApiData
+  apiData: ApiData,
 ): CompletionItem[] => {
   const word = getWordAtPosition(text, position)
   const filtered = filterByPrefix(word ?? "")(apiData)

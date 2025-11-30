@@ -1,7 +1,7 @@
 import type { Hover, HoverParams, TextDocuments } from "vscode-languageserver"
 import type { TextDocument } from "vscode-languageserver-textdocument"
-import type { ApiData } from "../types.js"
 import { getHoverInfo } from "../services/hover.service.js"
+import type { ApiData } from "../types.js"
 
 export const hoverHandler =
   (apiData: ApiData, documents: TextDocuments<TextDocument>) =>

@@ -1,16 +1,16 @@
+import { TextDocument } from "vscode-languageserver-textdocument"
 import {
   type Connection,
   type InitializeResult,
-  createConnection,
   ProposedFeatures,
   TextDocuments,
+  createConnection,
 } from "vscode-languageserver/node.js"
-import { TextDocument } from "vscode-languageserver-textdocument"
 import { serverCapabilities } from "./capabilities.js"
+import apiData from "./data/strudel-api.json" with { type: "json" }
 import { completionHandler } from "./handlers/completion.js"
 import { hoverHandler } from "./handlers/hover.js"
 import type { ApiData } from "./types.js"
-import apiData from "./data/strudel-api.json" with { type: "json" }
 
 const createServer = (): Connection => createConnection(ProposedFeatures.all)
 

@@ -1,6 +1,6 @@
 import { readFileSync, readdirSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
-import type { StrudelFunction, Parameter } from "../src/types.js"
+import type { Parameter, StrudelFunction } from "../src/types.js"
 
 const STRUDEL_CORE_PATH = "./node_modules/@strudel/core"
 

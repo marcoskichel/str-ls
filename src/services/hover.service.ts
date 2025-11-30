@@ -1,4 +1,4 @@
-import { MarkupKind, type Hover, type MarkupContent, type Position } from "vscode-languageserver"
+import { type Hover, type MarkupContent, MarkupKind, type Position } from "vscode-languageserver"
 import type { ApiData, StrudelFunction } from "../types.js"
 import { getWordAtPosition } from "./completion.service.js"
 
