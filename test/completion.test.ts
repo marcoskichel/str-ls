@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest"
-import { filterByPrefix, getWordAtPosition } from "../src/services/completion.service.js"
-import type { ApiData } from "../src/types.js"
+import { CompletionItemKind } from "vscode-languageserver"
+import {
+  filterByPrefix,
+  getWordAtPosition,
+  toCompletionItem,
+  toCompletionItems,
+} from "../src/services/completion.service.js"
+import type { ApiData, StrudelFunction } from "../src/types.js"
 
 const mockApiData: ApiData = [
   {
@@ -107,5 +113,35 @@ describe("filterByPrefix", () => {
   it("returns empty array when no match", () => {
     const result = filterByPrefix("xyz")(mockApiData)
     expect(result).toHaveLength(0)
+  })
+})
+
+describe("toCompletionItem", () => {
+  it("maps StrudelFunction to CompletionItem", () => {
+    const fn: StrudelFunction = {
+      name: "delay",
+      signature: "delay(amount: number)",
+      description: "Add delay effect",
+      parameters: [],
+      examples: ['s("bd").delay(0.5)'],
+      category: "effect",
+    }
+
+    const result = toCompletionItem(fn)
+
+    expect(result.label).toBe("delay")
+    expect(result.kind).toBe(CompletionItemKind.Function)
+    expect(result.detail).toBe("delay(amount: number)")
+    expect(result.documentation).toBe("Add delay effect")
+    expect(result.insertText).toBe("delay")
+  })
+})
+
+describe("toCompletionItems", () => {
+  it("maps array of functions", () => {
+    const result = toCompletionItems(mockApiData)
+    expect(result).toHaveLength(4)
+    expect(result[0]?.label).toBe("lpf")
+    expect(result[3]?.label).toBe("s")
   })
 })

@@ -1,5 +1,5 @@
-import type { CompletionItem, Position } from "vscode-languageserver"
-import type { ApiData } from "../types.js"
+import { CompletionItemKind, type CompletionItem, type Position } from "vscode-languageserver"
+import type { ApiData, StrudelFunction } from "../types.js"
 
 const isWordChar = (char: string): boolean => /[a-zA-Z0-9_]/.test(char)
 
@@ -31,6 +31,16 @@ export const filterByPrefix =
     const lowerPrefix = prefix.toLowerCase()
     return fns.filter((fn) => fn.name.toLowerCase().startsWith(lowerPrefix))
   }
+
+export const toCompletionItem = (fn: StrudelFunction): CompletionItem => ({
+  label: fn.name,
+  kind: CompletionItemKind.Function,
+  detail: fn.signature,
+  documentation: fn.description,
+  insertText: fn.name,
+})
+
+export const toCompletionItems = (fns: ApiData): CompletionItem[] => fns.map(toCompletionItem)
 
 export const getCompletions = (
   _text: string,
