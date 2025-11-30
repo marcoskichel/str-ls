@@ -1,0 +1,44 @@
+{
+  "name": "str-lsp",
+  "version": "0.1.0",
+  "description": "Language Server Protocol implementation for Strudel live coding language",
+  "type": "module",
+  "main": "dist/server.js",
+  "bin": {
+    "str-lsp": "dist/server.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "generate-api": "tsx scripts/generate-api-data.ts"
+  },
+  "keywords": [
+    "strudel",
+    "lsp",
+    "language-server",
+    "live-coding"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.11"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@strudel/core": "^1.1.0",
+    "@types/node": "^20.10.0",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.6"
+  }
+}
