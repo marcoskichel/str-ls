@@ -1,10 +1,31 @@
-import type { Hover, Position } from "vscode-languageserver"
-import type { ApiData } from "../types.js"
+import { MarkupKind, type Hover, type MarkupContent, type Position } from "vscode-languageserver"
+import type { ApiData, StrudelFunction } from "../types.js"
+import { getWordAtPosition } from "./completion.service.js"
 
-export const getHoverInfo = (
-  _text: string,
-  _position: Position,
-  _apiData: ApiData
-): Hover | null => {
-  return null
+export const findFunction =
+  (name: string) =>
+  (apiData: ApiData): StrudelFunction | undefined =>
+    apiData.find((fn) => fn.name === name)
+
+export const toHoverContent = (fn: StrudelFunction): MarkupContent => {
+  const lines = [`\`\`\`typescript\n${fn.signature}\n\`\`\``, "", fn.description]
+
+  if (fn.examples.length > 0) {
+    lines.push("", "**Examples:**", `\`\`\`javascript\n${fn.examples.join("\n")}\n\`\`\``)
+  }
+
+  return {
+    kind: MarkupKind.Markdown,
+    value: lines.join("\n"),
+  }
+}
+
+export const getHoverInfo = (text: string, position: Position, apiData: ApiData): Hover | null => {
+  const word = getWordAtPosition(text, position)
+  if (!word) return null
+
+  const fn = findFunction(word)(apiData)
+  if (!fn) return null
+
+  return { contents: toHoverContent(fn) }
 }
