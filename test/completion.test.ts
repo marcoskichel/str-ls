@@ -1,5 +1,41 @@
 import { describe, expect, it } from "vitest"
-import { getWordAtPosition } from "../src/services/completion.service.js"
+import { filterByPrefix, getWordAtPosition } from "../src/services/completion.service.js"
+import type { ApiData } from "../src/types.js"
+
+const mockApiData: ApiData = [
+  {
+    name: "lpf",
+    signature: "lpf(frequency: number)",
+    description: "Low-pass filter",
+    parameters: [],
+    examples: [],
+    category: "effect",
+  },
+  {
+    name: "lpq",
+    signature: "lpq(resonance: number)",
+    description: "Low-pass filter resonance",
+    parameters: [],
+    examples: [],
+    category: "effect",
+  },
+  {
+    name: "note",
+    signature: "note(pattern: string)",
+    description: "Define pitches",
+    parameters: [],
+    examples: [],
+    category: "core",
+  },
+  {
+    name: "s",
+    signature: "s(pattern: string)",
+    description: "Select sample",
+    parameters: [],
+    examples: [],
+    category: "core",
+  },
+]
 
 describe("getWordAtPosition", () => {
   it("returns word at cursor", () => {
@@ -48,5 +84,28 @@ describe("getWordAtPosition", () => {
     const text = 'note("c").lpf(500)'
     const result = getWordAtPosition(text, { line: 0, character: 12 })
     expect(result).toBe("lpf")
+  })
+})
+
+describe("filterByPrefix", () => {
+  it("filters matching functions", () => {
+    const result = filterByPrefix("lp")(mockApiData)
+    expect(result).toHaveLength(2)
+    expect(result.map((f) => f.name)).toEqual(["lpf", "lpq"])
+  })
+
+  it("returns all when prefix is empty", () => {
+    const result = filterByPrefix("")(mockApiData)
+    expect(result).toHaveLength(4)
+  })
+
+  it("is case insensitive", () => {
+    const result = filterByPrefix("LP")(mockApiData)
+    expect(result).toHaveLength(2)
+  })
+
+  it("returns empty array when no match", () => {
+    const result = filterByPrefix("xyz")(mockApiData)
+    expect(result).toHaveLength(0)
   })
 })

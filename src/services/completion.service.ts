@@ -24,6 +24,14 @@ export const getWordAtPosition = (text: string, position: Position): string | nu
   return line.slice(start, end)
 }
 
+export const filterByPrefix =
+  (prefix: string) =>
+  (fns: ApiData): ApiData => {
+    if (!prefix) return fns
+    const lowerPrefix = prefix.toLowerCase()
+    return fns.filter((fn) => fn.name.toLowerCase().startsWith(lowerPrefix))
+  }
+
 export const getCompletions = (
   _text: string,
   _position: Position,
